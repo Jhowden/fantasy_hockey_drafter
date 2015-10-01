@@ -1,13 +1,14 @@
-require "player"
-require "player_parser"
-require "print_formatter"
+require "./lib/player"
+require "./lib/player_parser"
+require "./lib/print_formatter"
+require "./lib/input_selector"
 
 class Runner
   NOTABLE_PLAYERS = ["Vladimir Tarasenko", "Braden Holtby", "Filip Forsberg", "Ryan Strome", "Nikita Kucherov", 
     "Johnny Gaudreau", "Valeri Nichushkin", "Blake Wheeler", "Teuvo Teravainen", "Sam Bennett", 
-    "Sean Monahan", "Evgeny Kuznetsov", "Mathew Dumba", "Anders Lee", "Marko Dano"]
+    "Sean Monahan", "Evgeny Kuznetsov", "Matt Dumba", "Anders Lee", "Marko Dano"]
 
-  attr_reader :players_available, :players_taken, :notable_players, :print_formatter
+  attr_reader :players_available, :players_taken, :notable_players, :print_formatter, :input_selector, :draft_over
 
   def initialize()
     @players_available = {}
@@ -15,27 +16,32 @@ class Runner
     @notable_players = {}
     @draft_over = false
     @print_formatter = PrintFormatter.new
+    @input_selector = InputSelector.new
 
     merge_player_ranking
     set_notable_players
   end
 
   def start_draft!()
-    # while !draft_over do
+    while !draft_over do
       print_formatter.print( players_taken, players_available, notable_players )
-      # get input about what who is picking
-      # set the player to taken
-      # loop over until switching to draft over
-    # end
+      taken_players = input_selector.selection( players_available, players_taken )
+
+      if taken_players.keys.size >= 16
+        @draft_over = true
+      end
+    end
   end
 
   private
 
   def merge_player_ranking()
-    three_year_avg_players = PlayerParser.new( three_year_avg_file_path ).parse.players
-    last_year_players = PlayerParser.new( last_year_file_path ).parse.players
-    player_names = three_year_avg_players.keys
-    update_ranking( player_names, three_year_avg_players, last_year_players )
+    three_year_avg_parser = PlayerParser.new( three_year_avg_file_path )
+    three_year_avg_parser.parse
+    last_year_parser = PlayerParser.new( last_year_file_path )
+    last_year_parser.parse
+    player_names = three_year_avg_parser.players.keys
+    update_ranking( player_names, three_year_avg_parser.players, last_year_parser.players )
   end
 
   def set_notable_players()

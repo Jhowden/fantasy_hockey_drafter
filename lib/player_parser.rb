@@ -12,7 +12,7 @@ class PlayerParser
     CSV.foreach( path, headers: true ) do |row|
       player_attribute_map = transformed_attributes row
       player = Player.new player_attribute_map
-      players[player.name] = player
+      players[player.player] = player
     end
   end
 

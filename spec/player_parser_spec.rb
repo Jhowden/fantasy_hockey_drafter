@@ -4,8 +4,8 @@ describe PlayerParser do
 
   let( :path ) { File.expand_path( File.join( File.dirname( __FILE__ ), "resources", "test_players.csv" ) ) }
   let( :parser ) { described_class.new( path ) }
-  let( :price ) { double( name: "Carey Price") }
-  let( :ovi ) { double( name: "Alex Ovechkin" ) }
+  let( :price ) { double( player: "Carey Price") }
+  let( :ovi ) { double( player: "Alex Ovechkin" ) }
 
   before :each do
     stub_const "Player", Class.new

@@ -10,7 +10,7 @@ class PrintFormatter
       display.sub!( "      *      ", add_additional_spaces( p.position, "      *      " ) )
     end
 
-    available_players.each do |p|
+    available_players.each do |pname, p|
       display.sub!( "    %                     ", add_additional_spaces( p.player,  "    %                     " ) )
       display.sub!( "    %     ", add_additional_spaces( p.position,  "    %     " ) )
       display.sub!( "  %   ", add_additional_spaces( p.fhg_value.to_s,  "  %   " ) )
@@ -29,7 +29,7 @@ class PrintFormatter
       display.sub!( "   ^    ", add_additional_spaces( p.sv_pct.to_s,  "   ^    " ) )
     end
 
-    notable_players.each do |p|
+    notable_players.each do |pname, p|
       display.sub!( "    &                     ", add_additional_spaces( p.player,  "    &                     " ) )
       display.sub!( "    &     ", add_additional_spaces( p.position,  "    &     " ) )
       display.sub!( "  &   ", add_additional_spaces( p.fhg_value.to_s,  "  &   " ) )
@@ -57,18 +57,20 @@ class PrintFormatter
   private
 
   def set_goalie_stats( display, goalies )
-    wins = goalies.map( &:wins ).reduce( :+ )
+    return if goalies.size == 0
+    puts goalies.inspect
+    wins = goalies.map( &:wins ).reduce( 0, :+ )
     display.sub!( "@ ", add_additional_spaces( wins.to_s, "@ " ) )
 
     gaa_collection = goalies.map( &:gaa )
-    gaa = ( gaa_collection.reduce( :+ ) / gaa_collection.size )
+    gaa = ( gaa_collection.reduce( 0, :+ ) / gaa_collection.size )
     display.sub!( "@   ", add_additional_spaces( gaa.to_s, "@   " ) )
 
     sv_pct_collection = goalies.map( &:sv_pct )
-    gaa = sv_pct_collection.reduce( :+ ) / sv_pct_collection.size
+    gaa = sv_pct_collection.reduce( 0, :+ ) / sv_pct_collection.size
     display.sub!( "@    ", add_additional_spaces( gaa.to_s, "@    " ) )
 
-    shutouts = goalies.map( &:shutouts ).reduce( :+ )
+    shutouts = goalies.map( &:shutouts ).reduce( 0, :+ )
     display.sub!( "@ ", add_additional_spaces( shutouts.to_s, "@ " ) )
   end
 
