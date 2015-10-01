@@ -10,7 +10,7 @@ class PrintFormatter
       display.sub!( "      *      ", add_additional_spaces( p.position, "      *      " ) )
     end
 
-    available_players.each do |pname, p|
+    available_players.reject{ |pname, p| p.taken }.each do |pname, p|
       display.sub!( "    %                     ", add_additional_spaces( p.player,  "    %                     " ) )
       display.sub!( "    %     ", add_additional_spaces( p.position,  "    %     " ) )
       display.sub!( "  %   ", add_additional_spaces( p.fhg_value.to_s,  "  %   " ) )
@@ -29,7 +29,7 @@ class PrintFormatter
       display.sub!( "   ^    ", add_additional_spaces( p.sv_pct.to_s,  "   ^    " ) )
     end
 
-    notable_players.each do |pname, p|
+    notable_players.reject{ |pname, p| p.taken }.each do |pname, p|
       display.sub!( "    &                     ", add_additional_spaces( p.player,  "    &                     " ) )
       display.sub!( "    &     ", add_additional_spaces( p.position,  "    &     " ) )
       display.sub!( "  &   ", add_additional_spaces( p.fhg_value.to_s,  "  &   " ) )
@@ -58,7 +58,6 @@ class PrintFormatter
 
   def set_goalie_stats( display, goalies )
     return if goalies.size == 0
-    puts goalies.inspect
     wins = goalies.map( &:wins ).reduce( 0, :+ )
     display.sub!( "@ ", add_additional_spaces( wins.to_s, "@ " ) )
 

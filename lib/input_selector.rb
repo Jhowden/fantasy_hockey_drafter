@@ -19,7 +19,7 @@ class InputSelector
   private
 
   def user_input
-    print "> "
+    puts "Input Selection: "
     gets.chomp
   end
 end

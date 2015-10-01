@@ -12,7 +12,7 @@ class Player
     @games_played = attributes[:games_played]
     @sv_pct       = attributes[:sv_pct]
     @gaa          = attributes[:gaa]
-    @wins         = attributes[:w]
+    @wins         = attributes[:wins]
     @shutouts     = attributes[:shutouts]
     @goals        = attributes[:goals]
     @assists      = attributes[:assists]
